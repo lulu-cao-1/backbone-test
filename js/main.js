@@ -1,8 +1,8 @@
 // Creating a new model class
 var Song = Backbone.Model.extend({
-  initialize: function(){
-    console.log("A new song has been created.");
-  },
+  // initialize: function(){
+  //   console.log("A new song has been created.");
+  // },
   idAttribute: "songId",
   urlRoot: "/api/songs",
   defaults: {
@@ -46,40 +46,33 @@ var countrySong = new CountrySong({
 
 countrySong.sing();
 
-var Vehicle = Backbone.Model.extend({
-  idAttribute: "registrationNumber",
-  urlRoot: "/api/vehicles",
-  validate: function(attrs) {
-    if (!attrs.registrationNumber) {
-      return "Vehicle is not valid.";
-    }
-  },
-  start: function() {
-    console.log("Vehicle started.");
-  }
+// Creating a new collection class
+var Songs = Backbone.Collection.extend({
+  model: Song
 });
 
-var Car = Vehicle.extend({
-  start: function() {
-    console.log("Car with registration number " + this.get("registrationNumber") + " started.");
-  }
+var songs = new Songs([
+  new Song({ songId: 3, title: "KC is Hot in the Summer", artist: "Orange" }),
+  new Song({ songId: 4, title: "The Burning Sun", downloads: 100 })
+]);
+
+songs.add(new Song({ songId: 5, title: "Waiting for Autumn", artist: "Orange", downloads: 50 })); // Adding a song at the end of the collection
+songs.add(new Song({ songId: 6, title: "Well, That's Climate Change for Ya", artist: "Orange", downloads: 70 }), { at: 0 }); // Adding a song at a specific index
+songs.push(new Song({ songId: 7, title: "I'm Going to Michigan Tomorrow" })); // Adding a song at the end of the collection
+
+console.log('All songs in the collection', songs);
+console.log('All songs in the collection', songs.toJSON());
+console.log('The song with cid c4', songs.get("c4")); // Getting a song by cid
+songs.remove(songs.get(3));
+console.log('Removed the song with id 3');
+console.log('The first song in the collection', songs.at(0)); // Getting a song by index
+console.log('The song with id 7', songs.get(7)); // Getting a song by id
+console.log('Removed the last song', songs.pop());
+console.log('The songs by the artist Orange', songs.where({ artist: "Orange" })); // Getting all songs with a specific attribute
+console.log('The first song by the artist Orange', songs.findWhere({ artist: "Orange" })); // Getting the first song with a specific attribute
+console.log('Songs with more than 70 downloads', songs.filter(function(song) {
+  return song.get("downloads") >= 70;
+}));
+songs.each(function(song) {
+  console.log(song.toJSON());
 });
-
-var car = new Car({
-  registrationNumber: "XLI887",
-  color: "Blue"
-});
-
-car.unset("registrationNumber");
-if (!car.isValid()) {
-  console.log(car.validationError);
-}
-
-car.set("registrationNumber", "XLI887");
-
-if (!car.isValid()) {
-  console.log(car.validationError);
-} else {
-  console.log("Car is valid.");
-  car.start();
-}
