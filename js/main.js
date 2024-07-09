@@ -76,3 +76,24 @@ console.log('Songs with more than 70 downloads', songs.filter(function(song) {
 songs.each(function(song) {
   console.log(song.toJSON());
 });
+
+// Creating a new view class
+var SongView = Backbone.View.extend({
+  tagName: "span",
+  className: "song",
+  id: "1234",
+  attributes: {
+    "data-genre": "Country"
+  },
+  render: function() {
+    this.$el.html("heyo good night");
+    return this;
+  }
+});
+
+// var songView = new SongView({ el: "#container" });
+// songView.render();
+
+var songView2 = new SongView();
+songView2.render();
+$("#container").html(songView2.$el);
