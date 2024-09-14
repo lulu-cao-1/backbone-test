@@ -16,9 +16,15 @@
     <body>
         <ul id="song"></ul>
         <ul id="songs"></ul>
-        <script src="js/lib/jquery-min.js"></script>
-        <script src="js/lib/underscore-min.js"></script>
-        <script src="js/lib/backbone-min.js"></script>
-        <script src="js/main.js"></script>
+        <script id="songTemplate" type="text/html">
+            <p>Title: <%= title %></p>
+            <p>Listeners: <%= listeners %></p>
+            <button>Listen</button>
+            <% if (listeners > 10) { %>
+                <span class="popular"><i>Popular!</i></span>
+            <% } %>
+        </script>
+        <!-- Require.js helps render different dependencies asynchronously -->
+        <script src="js/lib/require.js" data-main="js/main"></script>
     </body>
 </html>
